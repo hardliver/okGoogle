@@ -11,10 +11,10 @@ class IntentsSchema():
         return cls.intents[key_name]
 
     @classmethod
-    def route(cls, projectId, intent, lang, parms):
+    def route(cls, projectId, intent, **kwargs):
         """Routes an intent to the proper method"""
         func = cls.get_intent(projectId, intent)
-        return func(lang,**parms)
+        return func(**kwargs)
 
     @classmethod
     def register(cls, func, intent, projectId="base"):

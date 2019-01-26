@@ -4,7 +4,7 @@ from okGoogle.intents import intent
 
 
 @intent(projectId='djangook-e6a5a')
-def HelloWorld(lang,**kwargs):
+def HelloWorld(**kwargs):
     output = {
         'fulfillmentText': '<speak>Hello world!</speak>',
     }
@@ -12,15 +12,14 @@ def HelloWorld(lang,**kwargs):
 
 
 @intent(projectId='djangook-e6a5a')
-def Cookies(lang,**kwargs):
-    if kwargs['number']:
-        numCookie = int(kwargs['number'])
+def Cookies(**kwargs):
+    output = {}
+    if 'number' in kwargs['parms']:
+        numCookie = int(kwargs['parms']['number'])
         text = "{} cookies!".format(numCookie)
         if numCookie==1:
             text = "{} cookie!".format(numCookie)
     else:
         text = "How many cookies?"
-    output = {
-        'fulfillmentText': '<speak>{}</speak>'.format(text),
-    }
+    output['fulfillmentText'] = '<speak>{}</speak>'.format(text)
     return output

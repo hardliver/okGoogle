@@ -18,9 +18,11 @@ class ASKView(APIView):
         body          = json.loads(data)
         projectId     = body['session'].split('/')[1]
         intent        = body['queryResult']['intent']['displayName']
-        lang          = body['queryResult']['languageCode']
-        parms         = body['queryResult']['parameters']
-        output = IntentsSchema.route(projectId, intent, lang, parms)
+        kwargs = {
+            'lang'     : body['queryResult']['languageCode'],
+            'parms'    : body['queryResult']['parameters'],
+        }
+        output = IntentsSchema.route(projectId, intent, **kwargs)
         return Response(data=output, status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
