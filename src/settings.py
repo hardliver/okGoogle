@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Actions on Google
+STATIC_TOKEN = 'testToken'
 
 # Application definition
 
