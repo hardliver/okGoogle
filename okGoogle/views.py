@@ -1,9 +1,10 @@
+from __future__ import absolute_import
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 
-from django.conf import settings
-
+from . import settings
 from .intents import IntentsSchema
 
 import json
@@ -11,7 +12,7 @@ import re
 
 
 class ASKView(APIView):
-    def handle_request(self, data, is_auth):
+    def handleRequest(self, data, is_auth):
         if not is_auth:
             output = {'fulfillmentText': '<speak>Fulfillment authenticate fail.</speak>',}
             return Response(data=output, status=HTTP_200_OK)
@@ -26,10 +27,10 @@ class ASKView(APIView):
         return Response(data=output, status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        is_auth = self._validate_header(request)
-        return self.handle_request(request.body.decode("utf-8"), is_auth)
+        is_auth = self._validateHeader(request)
+        return self.handleRequest(request.body.decode("utf-8"), is_auth)
 
-    def _validate_header(self, request):
+    def _validateHeader(self, request):
         HEADERS = settings.ACTIONS_ON_GOOGLE['HEADERS']
         for k, v in HEADERS.items():
             reqHeader = 'HTTP_{}'.format(k).upper()
