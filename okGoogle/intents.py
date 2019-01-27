@@ -27,7 +27,7 @@ class IntentsSchema():
 def intent(*args, **kwargs):
     """
     Decorator that registers a function to the IntentsSchema
-    app - The specific app grouping you'd like to register this intent to - Default: base
+    projectId - The ID you get when you create a new agent
     intent - The intent you'd like to give this intent - Default: <The function name>
     """
     invoked = bool(not args or kwargs)

@@ -28,7 +28,11 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Actions on Google
-STATIC_TOKEN = 'testToken'
+ACTIONS_ON_GOOGLE = {
+    'HEADERS': {
+        'Authorization': 'testToken',
+    }
+}
 
 # Application definition
 

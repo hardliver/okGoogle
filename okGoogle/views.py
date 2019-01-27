@@ -26,9 +26,15 @@ class ASKView(APIView):
         return Response(data=output, status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        try:
-            STATIC_TOKEN = settings.STATIC_TOKEN
-            is_auth = True if request.META['HTTP_AUTHORIZATION']==STATIC_TOKEN else False
-        except:
-            is_auth = True
+        is_auth = self._validate_header(request)
         return self.handle_request(request.body.decode("utf-8"), is_auth)
+
+    def _validate_header(self, request):
+        HEADERS = settings.ACTIONS_ON_GOOGLE['HEADERS']
+        for k, v in HEADERS.items():
+            reqHeader = 'HTTP_{}'.format(k).upper()
+            if reqHeader not in request.META:
+                return False
+            elif request.META[reqHeader]!=v:
+                return False
+        return True
