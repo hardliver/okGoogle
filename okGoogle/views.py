@@ -13,6 +13,8 @@ import re
 
 class ASKView(APIView):
     def handleRequest(self, data, is_auth):
+        # Webhook request
+        # https://dialogflow.com/docs/fulfillment/how-it-works#webhook_request
         if not is_auth:
             output = {'fulfillmentText': '<speak>Fulfillment authenticate fail.</speak>',}
             return Response(data=output, status=HTTP_200_OK)

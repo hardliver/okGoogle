@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from okGoogle.intents import intent
+from okGoogle.responseBuilder import ResponseBuilder
 
 
 @intent(projectId='djangook-e6a5a')
@@ -12,15 +13,18 @@ def HelloWorld(**kwargs):
 
 
 @intent(projectId='djangook-e6a5a')
-def Cookies(**kwargs):
-    output = {}
-    if 'number' in kwargs['parms']:
-        if kwargs['parms']['number']:
-            numCookie = int(kwargs['parms']['number'])
+def Cookies(parms, **kwargs):
+    if 'number' in parms:
+        if parms['number']:
+            numCookie = int(parms['number'])
+            userResponse = False
             text = "{} cookies!".format(numCookie)
             if numCookie==1:
                 text = "{} cookie!".format(numCookie)
         else:
+            userResponse = True
             text = "How many cookies?"
-    output['fulfillmentText'] = '<speak>{}</speak>'.format(text)
-    return output
+        return ResponseBuilder.createResponse(
+            message      = '<speak>{}</speak>'.format(text),
+            userResponse = userResponse,
+        )
