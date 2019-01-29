@@ -6,6 +6,7 @@ class ResponseBuilder:
     def createResponse(
             self,
             message='',
+            source=None,
             userResponse=False,
             **kwargs
         ):
@@ -16,17 +17,29 @@ class ResponseBuilder:
         message: Text message to be spoken out by the Google home
                  Please checkout Actions on Google SSML.
                  https://developers.google.com/actions/reference/ssml
+        source: Build response depend which source.
         userResponse: Should end this session or wait user response.
                  Default False
         '''
         # Webhook response
         # https://dialogflow.com/docs/fulfillment/how-it-works#webhook_response
-        output = {
-            'fulfillmentText': message,
-            'payload': {
-                'google': {
-                    'expectUserResponse': userResponse,
+        if source=='google':
+            output = {
+                'payload': {
+                    'google': {
+                        'expectUserResponse': userResponse,
+                        'richResponse': {
+                            'items': [
+                                {
+                                    'simpleResponse': {
+                                        'textToSpeech': message,
+                                    },
+                                },
+                            ]
+                        },
+                    },
                 },
-            },
-        }
+            }
+        else:
+            output = {'fulfillmentText': message}
         return output

@@ -25,7 +25,12 @@ def Cookies(parms, **kwargs):
         else:
             userResponse = True
             text = "How many cookies?"
+
+        message = text
+        if kwargs['source']=='google':
+            message = '<speak>{}</speak>'.format(text)
         return ResponseBuilder.createResponse(
-            message      = '<speak>{}</speak>'.format(text),
+            message      = message,
+            source       = kwargs['source'],
             userResponse = userResponse,
         )
