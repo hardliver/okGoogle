@@ -5,7 +5,8 @@ from okGoogle.responseBuilder import ResponseBuilder
 
 
 @intent(projectId='djangook-e6a5a')
-def HelloWorld(**kwargs):
+def Hello_World(**kwargs):
+    print(kwargs)
     output = {
         'fulfillmentText': '<speak>Hello world!</speak>',
     }

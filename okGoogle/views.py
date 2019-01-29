@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from . import settings
 from .intents import IntentsSchema
+from .requestParser import RequestParser
 
 import json
 import re
@@ -20,12 +21,9 @@ class ASKView(APIView):
             return Response(data=output, status=HTTP_200_OK)
         body          = json.loads(data)
         projectId     = body['session'].split('/')[1]
-        intent        = body['queryResult']['intent']['displayName']
-        kwargs = {
-            'lang'     : body['queryResult']['languageCode'],
-            'parms'    : body['queryResult']['parameters'],
-        }
-        output = IntentsSchema.route(projectId, intent, **kwargs)
+        intent        = body['queryResult']['intent']['displayName'].replace(' ', '_')
+        params = RequestParser.getParam(body)
+        output = IntentsSchema.route(projectId, intent, **params)
         return Response(data=output, status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
