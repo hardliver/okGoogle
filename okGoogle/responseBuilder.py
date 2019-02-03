@@ -62,10 +62,38 @@ class ResponseBuilder:
         return output
 
     @classmethod
+    def imageResponse(
+            self,
+            imageUrl,
+            text=None,
+        ):
+        '''
+        Shortcut to create image response for Actions on Google V2 API
+
+        Parameters:
+        imageUrl: required, image's full link.
+            local static file can using ResponseTools.getStaticLink
+        text: optional, if user's device not support to show image.
+            but check user's device than using textResponse should be better.
+        '''
+        output = {
+          'fulfillmentMessages': [
+            {
+              'image': {
+                'imageUri': imageUrl,
+              }
+            }
+          ],
+        }
+        if text:
+            output['fulfillmentText'] = text
+        return output
+
+    @classmethod
     def cardResponse(
             self,
             imageUrl,
-            text,
+            text=None,
             title=None,
             subtitle=None,
             buttons=[],

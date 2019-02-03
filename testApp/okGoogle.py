@@ -56,3 +56,12 @@ def GameCard(request):
         imageUrl     = image,
         buttons      = buttons
     )
+
+
+@intent(projectId='djangook-e6a5a')
+def twiceCard(request):
+    image   = ResponseTools.getStaticLink(request, 'tzuyu.jpg')
+    return ResponseBuilder.imageResponse(
+        imageUrl = image,
+        text     = 'Sorry, your device not support this infomations',
+    )
