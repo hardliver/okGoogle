@@ -2,10 +2,11 @@ from __future__ import absolute_import
 
 from okGoogle.intents import intent
 from okGoogle.responseBuilder import ResponseTools, ResponseBuilder
+from okGoogle.requestParser import RequestParser
 
 
 @intent(projectId='djangook-e6a5a')
-def Hello_World(request, **kwargs):
+def Hello_World(request):
     output = {
         'fulfillmentText': '<speak>Hello world!</speak>',
     }
@@ -13,7 +14,9 @@ def Hello_World(request, **kwargs):
 
 
 @intent(projectId='djangook-e6a5a')
-def Cookies(request, parms, **kwargs):
+def Cookies(request):
+    reqInfo = RequestParser.getParam(request)
+    parms = reqInfo['parms']
     if 'number' in parms:
         if parms['number']:
             numCookie = int(parms['number'])
@@ -26,18 +29,19 @@ def Cookies(request, parms, **kwargs):
             text = "How many cookies?"
 
         message = text
-        if kwargs['source']=='google':
+        if reqInfo['source']=='google':
             message = '<speak>{}</speak>'.format(text)
 
         output = ResponseBuilder.textResponse(
             message      = message,
-            source       = kwargs['source'],
+            source       = reqInfo['source'],
             userResponse = userResponse,
         )
         return output
 
+
 @intent(projectId='djangook-e6a5a')
-def GameCard(request, parms, **kwargs):
+def GameCard(request):
     image   = ResponseTools.getStaticLink(request, 'DarkMagicianGirl.jpg')
     buttons = [
       {

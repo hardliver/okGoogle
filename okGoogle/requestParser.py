@@ -1,9 +1,11 @@
 from __future__ import absolute_import
 
+import json
+
 
 class RequestParser:
     @classmethod
-    def getInfo(self, body):
+    def _getInfo(self, body):
         params = {
             'lang'     : body['queryResult']['languageCode'],
             'parms'    : body['queryResult']['parameters'],
@@ -11,29 +13,39 @@ class RequestParser:
         return params
 
     @classmethod
-    def googleInfoParser(self, body):
+    def _googleInfoParser(self, body):
         params = {
             'userId': body['originalDetectIntentRequest']['payload']['user']['userId']
         }
         return params
 
     @classmethod
-    def lineInfoParser(self, body):
+    def _lineInfoParser(self, body):
         params = {
             'userId': body['originalDetectIntentRequest']['payload']['data']['source']['userId']
         }
         return params
 
     @classmethod
-    def getParam(self, body, *args, **kwargs):
+    def getParam(self, request):
         # Webhook request
         # https://dialogflow.com/docs/fulfillment/how-it-works#webhook_request
-        source = body['originalDetectIntentRequest']['source']
-
+        body = self.getRawParam(request)
+        try:
+            source = body['originalDetectIntentRequest']['source']
+        except:
+            source = None
         params = {'source': source}
-        params.update(self.getInfo(body))
+        params.update(self._getInfo(body))
         if source=='google':
-            params.update(self.googleInfoParser(body))
+            params.update(self._googleInfoParser(body))
         elif source=='line':
-            params.update(self.lineInfoParser(body))
+            params.update(self._lineInfoParser(body))
         return params
+
+    @classmethod
+    def getRawParam(self, request):
+        '''
+        Get all infomations that google request
+        '''
+        return json.loads(request.body.decode("utf-8"))

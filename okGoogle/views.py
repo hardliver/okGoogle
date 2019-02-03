@@ -9,7 +9,6 @@ from .intents import IntentsSchema
 from .requestParser import RequestParser
 
 import json
-import re
 
 
 class ASKView(APIView):
@@ -22,8 +21,7 @@ class ASKView(APIView):
         body          = json.loads(request.body.decode("utf-8"))
         projectId     = body['session'].split('/')[1]
         intent        = body['queryResult']['intent']['displayName'].replace(' ', '_')
-        params = RequestParser.getParam(body)
-        output = IntentsSchema.route(projectId, intent, request, **params)
+        output = IntentsSchema.route(projectId, intent, request)
         return Response(data=output, status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
